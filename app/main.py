@@ -1,11 +1,12 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from jose import jwt
 from passlib.context import CryptContext
 
-from app.schemas.token import Token
+from app.dependencies.dependency import check_token
+from app.schemas.token import Token, TokenData
 from app.settings import config
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -33,3 +34,8 @@ async def get_token():
         expires_delta=access_token_expires,
     )
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@app.get("/patients/")
+async def get_patients(token_data: TokenData = Depends(check_token)):
+    pass
