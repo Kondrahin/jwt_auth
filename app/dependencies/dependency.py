@@ -5,7 +5,7 @@ from pydantic import ValidationError
 from starlette import status
 
 from app.schemas.token import TokenData
-from app.settings import config
+from app.settings.config import config
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
