@@ -6,12 +6,21 @@ from jose import jwt
 from passlib.context import CryptContext
 
 from app.dependencies.dependency import check_token
+from app.events import startup, shutdown
 from app.schemas.token import Token, TokenData
 from app.settings import config
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 app = FastAPI()
+app.add_event_handler(
+    "startup",
+    startup(),
+)
+app.add_event_handler(
+    "shutdown",
+    shutdown(),
+)
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
