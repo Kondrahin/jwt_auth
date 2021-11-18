@@ -8,7 +8,9 @@ from sqlalchemy import engine_from_config, pool
 # init config
 from app.settings.config import config
 
-sys.path.append(str(pathlib.Path(__file__).resolve().parents[3]))
+# If start not from docker
+#sys.path.append(str(pathlib.Path(__file__).resolve().parents[3]))
+sys.path.append(str(pathlib.Path(__file__).resolve().parents[2]))
 
 from app.db.sqlalchemy import Base, make_url_sync  # isort:skip
 import app.db.models  # isort:skip
