@@ -1,0 +1,39 @@
+version: "3.7"
+
+services:
+
+  db:
+    image: postgres:13.4-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./scripts/pg-init-scripts:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    networks:
+      - defaultnetwork
+
+  app:
+    build: .
+    command: bash -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0
+      --port 8000"
+    ports:
+      - 80:8000
+    depends_on:
+      - db
+    env_file:
+      - .env
+    networks:
+      - defaultnetwork
+
+volumes:
+  postgres_data:
+
+    null
+networks:
+  defaultnetwork:
+    driver: bridge
